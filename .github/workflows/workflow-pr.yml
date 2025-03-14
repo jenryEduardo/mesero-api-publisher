@@ -5,6 +5,9 @@ on:
         branches: 
             - workspace_diego
         types: [opened, reopened, synchronize]
+    push: 
+        branches:
+            -develop
 
 jobs:
     test-build:
@@ -22,5 +25,19 @@ jobs:
         - name: Build
           run: go build -o main
 
-        - name: Confirm Build Success
-          run: echo "✅ Build completed successfully."
+        - name: Run Go Server
+          run: nohup ./main &
+
+        - name: Wait for server to start
+          run: sleep 5
+
+        - name: Verify server is running 
+          run: |
+             RESPONSE=$(curl http://localhost:8080/status)
+             if echo "$RESPONSE" | grep -q '"status":"OK"'; then
+                 echo "server is running and returned OK"
+             else
+                 echo "Server did not return expected ID."
+                 exit 1
+             fi
+
