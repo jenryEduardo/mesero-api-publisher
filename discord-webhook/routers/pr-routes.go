@@ -8,11 +8,11 @@ import (
 
 func SetupRoutesCount(router *gin.Engine) {
 
-	routes:=router.Group("/webhook")
+	
 
 	{
-		routes.POST("/pr", controllers.GithubWebhookHandler)
-		routes.POST("/errors", controllers.GithubReviewWebhookHandler)
+		router.POST("/webhoo-pr", controllers.GithubWebhookHandler)
+		router.POST("/webhook-errors", controllers.GithubReviewWebhookHandler)
 	}	
 }	
 
