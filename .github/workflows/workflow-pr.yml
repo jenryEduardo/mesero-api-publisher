@@ -1,0 +1,26 @@
+name: Workflow PR
+
+on:
+    pull_request:
+        branches: 
+            - workspace_diego
+        types: [opened, reopened, synchronize]
+
+jobs:
+    test-build:
+        runs-on: ubuntu-latest
+        
+        steps:
+        - name: Checkout code
+          uses: actions/checkout@v4
+
+        - name: Set Go version
+          uses: actions/setup-go@v5
+          with:
+             go-version: '1.21'
+
+        - name: Build
+          run: go build -o main
+
+        - name: Confirm Build Success
+          run: echo "✅ Build completed successfully."
