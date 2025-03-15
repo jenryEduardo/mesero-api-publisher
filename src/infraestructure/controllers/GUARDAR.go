@@ -15,9 +15,8 @@ func Guardar(c *gin.Context) {
 
 	var pedidp domain.Pedido
 
-	// Intenta deserializar el JSON
 	if err := c.ShouldBindJSON(&pedidp); err != nil {
-		log.Println("❌ Error al procesar el JSON:", err)
+		log.Println(" Error al procesar el JSON:", err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Error al procesar el JSON", "details": err.Error()})
 		return
 	}
@@ -28,7 +27,7 @@ func Guardar(c *gin.Context) {
 	success:=useCase.Execute(pedidp)
 
 	if success==nil{
-		fmt.Println("no se pudo ejecutar el caso de uso xd")
+		fmt.Println("no se pudo ejecutar el caso de uso")
 		return
 	}
 
