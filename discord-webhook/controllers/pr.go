@@ -11,10 +11,9 @@ import (
 	"github.com/google/go-github/github"
 )
 
-// URL del webhook de Discord (coloca la tuya aquí)
+
 const discordWebhookURL = "https://discordapp.com/api/webhooks/1349929254573572096/jKxQ52GZeZRR3F9u2QNxcBmF8qsKMDT9a-BVA1ini9mtCo18ib4DSAkEUQ93ff4I7UTq"
 
-// Formato del mensaje para Discord
 func SendToDiscord(message string) {
 	payload := map[string]string{"content": message}
 	jsonPayload, _ := json.Marshal(payload)
@@ -28,7 +27,6 @@ func SendToDiscord(message string) {
 	}
 }
 
-// Maneja los webhooks de GitHub
 func GithubWebhookHandler(c *gin.Context) {
 	var payload github.PullRequestEvent
 	if err := c.ShouldBindJSON(&payload); err != nil {
@@ -36,7 +34,6 @@ func GithubWebhookHandler(c *gin.Context) {
 		return
 	}
 
-	// Generar mensaje
 	pr := payload.PullRequest
 	if pr != nil {
 		message := fmt.Sprintf("🔔 **Nuevo PR**: [%s](%s)\n👤 Autor: %s\n📌 Estado: %s",
