@@ -1,0 +1,41 @@
+name: CI - Pruebas Automáticas
+
+on:
+  pull_request:
+    branches:
+      - main 
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name:  Clonar repositorio
+        uses: actions/checkout@v3
+
+      - name: ⚙️ Configurar Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.23
+
+      - name:  Instalar dependencias
+        run: go mod tidy
+
+      - name:  Ejecutar pruebas unitarias
+        run: go test ./...
+
+      - name:  Notificar éxito en Discord
+        if: success()
+        run: |
+          curl -H "Content-Type: application/json" \
+               -X POST \
+               -d '{"content": " **Las pruebas unitarias fueron exitosas en el PR!**"}' \
+               ${{ secrets.DISCORD_WEBHOOK_URL }}
+
+      - name:  Notificar fallo en Discord
+        if: failure()
+        run: |
+          curl -H "Content-Type: application/json" \
+               -X POST \
+               -d '{"content": " **Las pruebas unitarias fallaron en el PR!**"}' \
+               ${{ secrets.DISCORD_WEBHOOK_URL }}
